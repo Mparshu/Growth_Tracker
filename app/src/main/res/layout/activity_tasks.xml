@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/taskInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter task"
+        android:padding="12dp"/>
+
+    <EditText
+        android:id="@+id/scoreInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter score"
+        android:inputType="number"
+        android:padding="12dp"/>
+
+    <Spinner
+        android:id="@+id/areaSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"/>
+
+    <Button
+        android:id="@+id/addButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Task"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/physicalHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Physical Activities"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:padding="8dp"
+                android:background="#E8E8E8"/>
+
+            <ListView
+                android:id="@+id/physicalTasksList"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"/>
+
+            <TextView
+                android:id="@+id/mentalHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mental Activities"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:padding="8dp"
+                android:background="#E8E8E8"/>
+
+            <ListView
+                android:id="@+id/mentalTasksList"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"/>
+
+            <TextView
+                android:id="@+id/emotionalHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Emotional Skills"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:padding="8dp"
+                android:background="#E8E8E8"/>
+
+            <ListView
+                android:id="@+id/emotionalTasksList"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"/>
+
+            <TextView
+                android:id="@+id/financialHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Financial Skills"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:padding="8dp"
+                android:background="#E8E8E8"/>
+
+            <ListView
+                android:id="@+id/financialTasksList"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
