@@ -5,20 +5,27 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+
     <EditText
         android:id="@+id/taskInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter task"
-        android:padding="12dp"/>
+        android:hint="Enter Task"
+        android:padding="16dp"
+        android:textSize="18sp"
+        android:layout_marginBottom="16dp"
+        android:drawablePadding="8dp"/>
 
     <EditText
         android:id="@+id/scoreInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter score"
+        android:hint="Enter Score"
         android:inputType="number"
-        android:padding="12dp"/>
+        android:padding="16dp"
+        android:textSize="18sp"
+        android:layout_marginBottom="16dp"
+        android:drawablePadding="8dp"/>
 
     <Spinner
         android:id="@+id/areaSpinner"
@@ -56,7 +63,7 @@
             <ListView
                 android:id="@+id/physicalTasksList"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"/>
+                android:layout_height="400dp"/>
 
             <TextView
                 android:id="@+id/mentalHeader"
@@ -71,7 +78,7 @@
             <ListView
                 android:id="@+id/mentalTasksList"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"/>
+                android:layout_height="400dp"/>
 
             <TextView
                 android:id="@+id/emotionalHeader"
@@ -86,7 +93,7 @@
             <ListView
                 android:id="@+id/emotionalTasksList"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"/>
+                android:layout_height="400dp"/>
 
             <TextView
                 android:id="@+id/financialHeader"
@@ -101,7 +108,7 @@
             <ListView
                 android:id="@+id/financialTasksList"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"/>
+                android:layout_height="400dp"/>
 
         </LinearLayout>
     </ScrollView>
