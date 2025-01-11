@@ -9,159 +9,171 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <TextView
-            android:id="@+id/dateView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp"
-            android:layout_gravity="center"/>
-
-        <TextView
-            android:id="@+id/totalScore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Total Score: 0"
-            android:textSize="36sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="32dp"
-            android:layout_gravity="center"/>
-
-        <!-- Physical Section -->
+        <!-- This is the container that will be captured for sharing -->
         <LinearLayout
+            android:id="@+id/scoresContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="8dp"
-            android:background="#F5F5F5"
-            android:layout_marginBottom="8dp">
+            android:background="@android:color/white"
+            android:padding="16dp">
 
             <TextView
-                android:id="@+id/physicalScore"
+                android:id="@+id/dateView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Physical Score: 0"
-                android:textSize="20sp"/>
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp"
+                android:layout_gravity="center"/>
 
-            <ProgressBar
-                android:id="@+id/physicalProgress"
-                style="?android:attr/progressBarStyleHorizontal"
+            <TextView
+                android:id="@+id/totalScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Score: 0"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="32dp"
+                android:layout_gravity="center"/>
+
+            <!-- Physical Section -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:progress="0"
-                android:progressTint="#4CAF50"/>
+                android:orientation="vertical"
+                android:padding="8dp"
+                android:background="#F5F5F5"
+                android:layout_marginBottom="8dp">
 
-            <TextView
-                android:id="@+id/physicalTasksCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Completed: 0/0 tasks"
-                android:textSize="14sp"/>
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/physicalScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Physical Score: 0"
+                    android:textSize="20sp"/>
 
-        <!-- Mental Section -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp"
-            android:background="#F5F5F5"
-            android:layout_marginBottom="8dp">
+                <ProgressBar
+                    android:id="@+id/physicalProgress"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:progress="0"
+                    android:progressTint="#4CAF50"/>
 
-            <TextView
-                android:id="@+id/mentalScore"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mental Score: 0"
-                android:textSize="20sp"/>
+                <TextView
+                    android:id="@+id/physicalTasksCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Completed: 0/0 tasks"
+                    android:textSize="14sp"/>
+            </LinearLayout>
 
-            <ProgressBar
-                android:id="@+id/mentalProgress"
-                style="?android:attr/progressBarStyleHorizontal"
+            <!-- Mental Section -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:progress="0"
-                android:progressTint="#2196F3"/>
+                android:orientation="vertical"
+                android:padding="8dp"
+                android:background="#F5F5F5"
+                android:layout_marginBottom="8dp">
 
-            <TextView
-                android:id="@+id/mentalTasksCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Completed: 0/0 tasks"
-                android:textSize="14sp"/>
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/mentalScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mental Score: 0"
+                    android:textSize="20sp"/>
 
-        <!-- Emotional Section -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp"
-            android:background="#F5F5F5"
-            android:layout_marginBottom="8dp">
+                <ProgressBar
+                    android:id="@+id/mentalProgress"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:progress="0"
+                    android:progressTint="#2196F3"/>
 
-            <TextView
-                android:id="@+id/emotionalScore"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Emotional Score: 0"
-                android:textSize="20sp"/>
+                <TextView
+                    android:id="@+id/mentalTasksCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Completed: 0/0 tasks"
+                    android:textSize="14sp"/>
+            </LinearLayout>
 
-            <ProgressBar
-                android:id="@+id/emotionalProgress"
-                style="?android:attr/progressBarStyleHorizontal"
+            <!-- Emotional Section -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:progress="0"
-                android:progressTint="#FF9800"/>
+                android:orientation="vertical"
+                android:padding="8dp"
+                android:background="#F5F5F5"
+                android:layout_marginBottom="8dp">
 
-            <TextView
-                android:id="@+id/emotionalTasksCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Completed: 0/0 tasks"
-                android:textSize="14sp"/>
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/emotionalScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Emotional Score: 0"
+                    android:textSize="20sp"/>
 
-        <!-- Financial Section -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp"
-            android:background="#F5F5F5"
-            android:layout_marginBottom="32dp">
+                <ProgressBar
+                    android:id="@+id/emotionalProgress"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:progress="0"
+                    android:progressTint="#FF9800"/>
 
-            <TextView
-                android:id="@+id/financialScore"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Financial Score: 0"
-                android:textSize="20sp"/>
+                <TextView
+                    android:id="@+id/emotionalTasksCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Completed: 0/0 tasks"
+                    android:textSize="14sp"/>
+            </LinearLayout>
 
-            <ProgressBar
-                android:id="@+id/financialProgress"
-                style="?android:attr/progressBarStyleHorizontal"
+            <!-- Financial Section -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:progress="0"
-                android:progressTint="#9C27B0"/>
+                android:orientation="vertical"
+                android:padding="8dp"
+                android:background="#F5F5F5"
+                android:layout_marginBottom="8dp">
 
-            <TextView
-                android:id="@+id/financialTasksCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Completed: 0/0 tasks"
-                android:textSize="14sp"/>
+                <TextView
+                    android:id="@+id/financialScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Financial Score: 0"
+                    android:textSize="20sp"/>
+
+                <ProgressBar
+                    android:id="@+id/financialProgress"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:progress="0"
+                    android:progressTint="#9C27B0"/>
+
+                <TextView
+                    android:id="@+id/financialTasksCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Completed: 0/0 tasks"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+
         </LinearLayout>
 
-        <!-- Buttons Section -->
+        <!-- Buttons outside the sharing container -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_marginTop="16dp">
 
             <Button
                 android:id="@+id/tasksButton"

@@ -2,6 +2,7 @@ package com.example.growth_tracker;
 // MainActivity.java
 
 import android.content.Intent;
+import android.util.Log;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -14,9 +15,22 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
+import android.view.Menu;
+import android.view.MenuItem;
+import androidx.core.content.FileProvider;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     private TextView totalScoreView;
+    private static final int PERMISSION_REQUEST_CODE = 123;
     private TextView dateView;
     private TextView physicalScoreView;
     private TextView mentalScoreView;
@@ -53,6 +67,24 @@ public class MainActivity extends AppCompatActivity {
         updateDateDisplay();
         checkAndResetScore();
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_share) {
+            if (checkAndRequestPermissions()) {
+                shareScreenshot();
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
 
     private void initializeViews() {
         // Text views for scores
@@ -191,6 +223,101 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    private void shareScreenshot() {
+        View contentView = findViewById(R.id.scoresContainer);
+
+        try {
+            // Ensure the view has been laid out
+            contentView.post(() -> {
+                try {
+                    contentView.setDrawingCacheEnabled(true);
+                    Bitmap bitmap = Bitmap.createBitmap(contentView.getDrawingCache());
+                    contentView.setDrawingCacheEnabled(false);
+
+                    // Save to cache directory (doesn't require storage permission)
+                    File cachePath = new File(getCacheDir(), "images");
+                    cachePath.mkdirs();
+                    File imageFile = new File(cachePath, "dashboard_screenshot.png");
+                    FileOutputStream stream = new FileOutputStream(imageFile);
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    stream.close();
+
+                    Uri contentUri = FileProvider.getUriForFile(this,
+                            getApplicationContext().getPackageName() + ".fileprovider",
+                            imageFile);
+
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("image/png");
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+                    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                    startActivity(Intent.createChooser(shareIntent, "Share Dashboard"));
+
+                } catch (IOException e) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(MainActivity.this,
+                                "Error creating screenshot: " + e.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    });
+                    e.printStackTrace();
+                }
+            });
+        } catch (Exception e) {
+            Toast.makeText(this, "Error preparing screenshot: " + e.getMessage(),
+                    Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            // Log the results
+            Log.d("PermissionDebug", "Number of permissions: " + grantResults.length);
+            for (int i = 0; i < permissions.length; i++) {
+                Log.d("PermissionDebug", "Permission: " + permissions[i] +
+                        " Result: " + (grantResults[i] == PackageManager.PERMISSION_GRANTED ? "GRANTED" : "DENIED"));
+            }
+
+            // For Android 10 (API 29) and above, we don't need external storage permission
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                shareScreenshot();
+                return;
+            }
+
+            // For older versions, check the permission
+            if (grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                shareScreenshot();
+            } else {
+                Toast.makeText(this, "Storage permission is required to share the screenshot",
+                        Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private boolean checkAndRequestPermissions() {
+        // For Android 10 (API 29) and above, we don't need external storage permission
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return true;
+        }
+
+        // For older versions, check storage permission
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        PERMISSION_REQUEST_CODE
+                );
+                return false;
+            }
+        }
+        return true;
+    }
     private void saveProgressHistory() {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         ProgressHistory history = new ProgressHistory();
