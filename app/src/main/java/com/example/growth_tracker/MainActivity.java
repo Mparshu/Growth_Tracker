@@ -1,12 +1,14 @@
 package com.example.growth_tracker;
 // MainActivity.java
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.util.Log;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -54,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String MENTAL_SCORE_KEY = "mentalScore";
     private static final String EMOTIONAL_SCORE_KEY = "emotionalScore";
     private static final String FINANCIAL_SCORE_KEY = "financialScore";
+    private static final String USER_NAME_KEY = "userName";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +65,45 @@ public class MainActivity extends AppCompatActivity {
 
         preferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
 
+        checkFirstRun();
         initializeViews();
         setupClickListeners();
         updateDateDisplay();
         checkAndResetScore();
+    }
+
+    private void checkFirstRun() {
+        if (!preferences.contains(USER_NAME_KEY)) {
+            showNameInputDialog();
+        } else {
+            updateUserName();
+        }
+    }
+
+    private void updateUserName() {
+        String userName = preferences.getString(USER_NAME_KEY, "User");
+        TextView userNameView = findViewById(R.id.userNameView);
+        userNameView.setText(userName + "'s Dashboard");
+    }
+
+    private void showNameInputDialog() {
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_name_input, null);
+        EditText input = dialogView.findViewById(R.id.nameInput);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle("Welcome!")
+                .setView(dialogView)
+                .setCancelable(false)
+                .setPositiveButton("Save", (dialog, which) -> {
+                    String name = input.getText().toString().trim();
+                    if (!name.isEmpty()) {
+                        preferences.edit()
+                                .putString(USER_NAME_KEY, name)
+                                .apply();
+                        updateUserName();
+                    }
+                });
+        builder.show();
     }
 
     @Override
@@ -226,6 +264,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void shareScreenshot() {
         View contentView = findViewById(R.id.scoresContainer);
+        String userName = getSharedPreferences(PREF_NAME, MODE_PRIVATE)
+                .getString(USER_NAME_KEY, "User");
+
+        // Add name to the screenshot
+        TextView userNameView = findViewById(R.id.userNameView);
+        userNameView.setText(userName + "'s Dashboard");
 
         try {
             // Ensure the view has been laid out
