@@ -12,13 +12,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.media.MediaPlayer;
 import androidx.appcompat.app.AppCompatActivity;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -57,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String EMOTIONAL_SCORE_KEY = "emotionalScore";
     private static final String FINANCIAL_SCORE_KEY = "financialScore";
     private static final String USER_NAME_KEY = "userName";
+    private MediaPlayer mediaPlayer;
+    private boolean isPlaying = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         preferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        mediaPlayer = MediaPlayer.create(this, R.raw.motivational_music);
+
+        mediaPlayer.setOnCompletionListener(mp -> {
+            isPlaying = false; // Update playback state
+            invalidateOptionsMenu(); // Refresh menu icons
+        });
 
         checkFirstRun();
         initializeViews();
@@ -114,7 +122,29 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         }
+        if (item.getItemId() == R.id.action_play) {
+            if (isPlaying) {
+                mediaPlayer.pause();
+                item.setIcon(android.R.drawable.ic_media_play);
+            } else {
+                mediaPlayer.start();
+                item.setIcon(android.R.drawable.ic_media_pause);
+            }
+            isPlaying = !isPlaying;
+            return true;
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
     }
 
     @Override
