@@ -41,7 +41,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Total Score: 0"
-                android:textSize="36sp"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:id="@+id/percentage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Percentage: 0%"
+                android:textSize="24sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="32dp"
                 android:layout_gravity="center"/>

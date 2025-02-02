@@ -32,6 +32,7 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     private TextView totalScoreView;
+    private TextView percentageView;
     private static final int PERMISSION_REQUEST_CODE = 123;
     private TextView dateView;
     private TextView physicalScoreView;
@@ -158,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
         // Text views for scores
         dateView = findViewById(R.id.dateView);
         totalScoreView = findViewById(R.id.totalScore);
+        percentageView = findViewById(R.id.percentage);
         physicalScoreView = findViewById(R.id.physicalScore);
         mentalScoreView = findViewById(R.id.mentalScore);
         emotionalScoreView = findViewById(R.id.emotionalScore);
@@ -213,24 +215,78 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateAllScores() {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
-        int physicalScore = preferences.getInt(PHYSICAL_SCORE_KEY, 0);
-        int mentalScore = preferences.getInt(MENTAL_SCORE_KEY, 0);
-        int emotionalScore = preferences.getInt(EMOTIONAL_SCORE_KEY, 0);
-        int financialScore = preferences.getInt(FINANCIAL_SCORE_KEY, 0);
-        int totalScore = physicalScore + mentalScore + emotionalScore + financialScore;
 
-        // Update scores
+        // Get all tasks to calculate total possible score
+        int totalPossibleScore = 0;
+        int totalAchievedScore = 0;
+
+        // Calculate physical scores
+        ArrayList<Task> physicalTasks = dbHelper.getTasksByArea(TaskArea.PHYSICAL);
+        int physicalScore = calculateAreaScore(physicalTasks);
+        totalAchievedScore += physicalScore;
+        totalPossibleScore += calculateAreaPossibleScore(physicalTasks);
+
+        // Calculate mental scores
+        ArrayList<Task> mentalTasks = dbHelper.getTasksByArea(TaskArea.MENTAL);
+        int mentalScore = calculateAreaScore(mentalTasks);
+        totalAchievedScore += mentalScore;
+        totalPossibleScore += calculateAreaPossibleScore(mentalTasks);
+
+        // Calculate emotional scores
+        ArrayList<Task> emotionalTasks = dbHelper.getTasksByArea(TaskArea.EMOTIONAL);
+        int emotionalScore = calculateAreaScore(emotionalTasks);
+        totalAchievedScore += emotionalScore;
+        totalPossibleScore += calculateAreaPossibleScore(emotionalTasks);
+
+        // Calculate financial scores
+        ArrayList<Task> financialTasks = dbHelper.getTasksByArea(TaskArea.FINANCIAL);
+        int financialScore = calculateAreaScore(financialTasks);
+        totalAchievedScore += financialScore;
+        totalPossibleScore += calculateAreaPossibleScore(financialTasks);
+
+        // Calculate percentage
+        float percentage = 0;
+        if (totalPossibleScore > 0) {
+            percentage = (totalAchievedScore * 100.0f) / totalPossibleScore;
+        }
+
+        // Update views
         physicalScoreView.setText("Physical Score: " + physicalScore);
         mentalScoreView.setText("Mental Score: " + mentalScore);
         emotionalScoreView.setText("Emotional Score: " + emotionalScore);
         financialScoreView.setText("Financial Score: " + financialScore);
-        totalScoreView.setText("Total Score: " + totalScore);
 
         // Update progress bars and task counts
         updateAreaProgress(TaskArea.PHYSICAL, dbHelper);
         updateAreaProgress(TaskArea.MENTAL, dbHelper);
         updateAreaProgress(TaskArea.EMOTIONAL, dbHelper);
         updateAreaProgress(TaskArea.FINANCIAL, dbHelper);
+
+        // Format total score with percentage
+        String totalScoreText = String.format("Total Score: %d/%d",
+                totalAchievedScore, totalPossibleScore);
+
+        String percentageText = String.format("Percentage: %.1f%%", percentage);
+        percentageView.setText(percentageText);
+        totalScoreView.setText(totalScoreText);
+    }
+
+    private int calculateAreaScore(ArrayList<Task> tasks) {
+        int score = 0;
+        for (Task task : tasks) {
+            if (task.isCompleted()) {
+                score += task.getScore();
+            }
+        }
+        return score;
+    }
+
+    private int calculateAreaPossibleScore(ArrayList<Task> tasks) {
+        int possibleScore = 0;
+        for (Task task : tasks) {
+            possibleScore += task.getScore();
+        }
+        return possibleScore;
     }
 
     private void updateAreaProgress(TaskArea area, DatabaseHelper dbHelper) {
