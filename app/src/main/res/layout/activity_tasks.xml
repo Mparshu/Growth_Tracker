@@ -27,7 +27,7 @@
             <ListView
                 android:id="@+id/physicalTasksList"
                 android:layout_width="match_parent"
-                android:layout_height="500dp"/>
+                android:layout_height="700dp"/>
 
             <TextView
                 android:id="@+id/mentalHeader"
@@ -42,7 +42,7 @@
             <ListView
                 android:id="@+id/mentalTasksList"
                 android:layout_width="match_parent"
-                android:layout_height="500dp"/>
+                android:layout_height="700dp"/>
 
             <TextView
                 android:id="@+id/emotionalHeader"
@@ -57,7 +57,7 @@
             <ListView
                 android:id="@+id/emotionalTasksList"
                 android:layout_width="match_parent"
-                android:layout_height="500dp"/>
+                android:layout_height="700dp"/>
 
             <TextView
                 android:id="@+id/financialHeader"
@@ -72,7 +72,7 @@
             <ListView
                 android:id="@+id/financialTasksList"
                 android:layout_width="match_parent"
-                android:layout_height="500dp"/>
+                android:layout_height="700dp"/>
 
         </LinearLayout>
     </ScrollView>
