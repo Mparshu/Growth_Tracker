@@ -7,7 +7,9 @@ import android.util.Log;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ProgressBar;
@@ -51,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView financialTasksCount;
 
     private SharedPreferences preferences;
+    private DatabaseHelper dbHelper;
     private static final String PREF_NAME = "TodoPrefs";
     private static final String LAST_DATE_KEY = "lastDate";
     private static final String PHYSICAL_SCORE_KEY = "physicalScore";
@@ -66,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        dbHelper = new DatabaseHelper(this);
         preferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
         mediaPlayer = MediaPlayer.create(this, R.raw.motivational_music);
 
@@ -121,6 +125,10 @@ public class MainActivity extends AppCompatActivity {
             if (checkAndRequestPermissions()) {
                 shareScreenshot();
             }
+            return true;
+        }
+        if (item.getItemId() == R.id.task_add) {
+            showAddTaskDialog();
             return true;
         }
         if (item.getItemId() == R.id.action_play) {
@@ -205,6 +213,45 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         checkAndResetScore();
         updateAllScores();
+    }
+
+    private void showAddTaskDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = getLayoutInflater().inflate(R.layout.add_new_task, null);
+
+        EditText taskInput = view.findViewById(R.id.taskInput);
+        EditText scoreInput = view.findViewById(R.id.scoreInput);
+        Spinner areaSpinner = view.findViewById(R.id.areaSpinner);
+
+        // Set up spinner
+        ArrayAdapter<TaskArea> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, TaskArea.values());
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        areaSpinner.setAdapter(adapter);
+
+        builder.setView(view)
+                .setTitle("Add New Task")
+                .setPositiveButton("Add Task", (dialog, which) -> {
+                    String description = taskInput.getText().toString().trim();
+                    String scoreText = scoreInput.getText().toString().trim();
+                    TaskArea area = (TaskArea) areaSpinner.getSelectedItem();
+
+                    if (!description.isEmpty() && !scoreText.isEmpty()) {
+                        try {
+                            int score = Integer.parseInt(scoreText);
+                            Task newTask = new Task(description, score, area);
+                            dbHelper.addTask(newTask);
+                            updateAllScores();
+                            Toast.makeText(this, "Task added successfully",
+                                    Toast.LENGTH_SHORT).show();
+                        } catch (NumberFormatException e) {
+                            Toast.makeText(this, "Please enter a valid score",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
     }
 
     private void updateDateDisplay() {
