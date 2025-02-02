@@ -39,6 +39,12 @@
             android:label="Progress History"
             android:parentActivityName=".MainActivity" />
 
+        <activity
+            android:name=".MusicPlaybackActivity"
+            android:exported="false"
+            android:label="Music Player"
+            android:parentActivityName=".MainActivity" />
+
         <!-- Add FileProvider -->
         <provider
             android:name="androidx.core.content.FileProvider"

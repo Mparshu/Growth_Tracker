@@ -1,17 +1,20 @@
 package com.example.growth_tracker;
 
-
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.ArrayList;
 
 public class TasksActivity extends AppCompatActivity {
     private ListView physicalTasksList, mentalTasksList, emotionalTasksList, financialTasksList;
     private DatabaseHelper dbHelper;
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +24,7 @@ public class TasksActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("View Tasks");
 
+        preferences = getSharedPreferences("GrowthTrackerPreferences", MODE_PRIVATE);
         initializeViews();
         loadTasks();
     }
@@ -41,16 +45,44 @@ public class TasksActivity extends AppCompatActivity {
         setTasksList(TaskArea.FINANCIAL, financialTasksList);
     }
 
-    private void setTasksList(TaskArea area, ListView listView) {
+    private void setTasksList(final TaskArea area, ListView listView) {
         ArrayList<Task> tasks = dbHelper.getTasksByArea(area);
-        TasksAdapter adapter = new TasksAdapter(this, tasks);
+        final TasksAdapter adapter = new TasksAdapter(this, tasks);
         listView.setAdapter(adapter);
+
+        // Now we set a listener for the delete button inside the adapter
+        adapter.setOnDeleteClickListener(new TasksAdapter.OnDeleteClickListener() {
+            @Override
+            public void onDeleteClick(Task task, int position) {
+                // Call the deleteTask method in the adapter to remove the task
+                adapter.deleteTask(task, position);
+
+                // Show a toast to confirm deletion
+                Toast.makeText(TasksActivity.this, "Task deleted!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private String getScoreKey(TaskArea area) {
+        // Example of how you can use the area to determine the score key
+        switch (area) {
+            case PHYSICAL:
+                return "physical_score";
+            case MENTAL:
+                return "mental_score";
+            case EMOTIONAL:
+                return "emotional_score";
+            case FINANCIAL:
+                return "financial_score";
+            default:
+                return "default_score";
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
+            getOnBackPressedDispatcher();
             return true;
         }
         return super.onOptionsItemSelected(item);

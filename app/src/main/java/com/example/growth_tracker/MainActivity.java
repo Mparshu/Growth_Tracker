@@ -132,14 +132,9 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (item.getItemId() == R.id.action_play) {
-            if (isPlaying) {
-                mediaPlayer.pause();
-                item.setIcon(android.R.drawable.ic_media_play);
-            } else {
-                mediaPlayer.start();
-                item.setIcon(android.R.drawable.ic_media_pause);
-            }
-            isPlaying = !isPlaying;
+            // Launch Music Activity
+            Intent intent = new Intent(MainActivity.this, MusicPlaybackActivity.class);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
