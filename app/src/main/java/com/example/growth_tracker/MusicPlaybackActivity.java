@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MusicPlaybackActivity extends AppCompatActivity {
     private MediaPlayer mediaPlayer;
     private int currentMusicIndex = -1;
-    private SeekBar progressBar1, progressBar2, progressBar3, progressBar4;
+    private SeekBar progressBar1, progressBar2, progressBar3, progressBar4, progressBar5, progressBar6, progressBar7;
     private Handler progressHandler = new Handler();
     private Runnable progressRunnable;
 
@@ -26,6 +26,7 @@ public class MusicPlaybackActivity extends AppCompatActivity {
         progressBar2 = findViewById(R.id.progressBar2);
         progressBar3 = findViewById(R.id.progressBar3);
         progressBar4 = findViewById(R.id.progressBar4);
+        
 
         // Set listeners for SeekBar changes
         setSeekBarListeners(progressBar1);
@@ -67,11 +68,17 @@ public class MusicPlaybackActivity extends AppCompatActivity {
         ImageButton playButton2 = findViewById(R.id.playButton2);
         ImageButton playButton3 = findViewById(R.id.playButton3);
         ImageButton playButton4 = findViewById(R.id.playButton4);
+        ImageButton playButton5 = findViewById(R.id.playButton5);
+        ImageButton playButton6 = findViewById(R.id.playButton6);
+        ImageButton playButton7 = findViewById(R.id.playButton7);
 
         playButton1.setOnClickListener(v -> togglePlayPause(0, playButton1));
         playButton2.setOnClickListener(v -> togglePlayPause(1, playButton2));
         playButton3.setOnClickListener(v -> togglePlayPause(2, playButton3));
         playButton4.setOnClickListener(v -> togglePlayPause(3, playButton4));
+        playButton5.setOnClickListener(v -> togglePlayPause(4, playButton5));
+        playButton6.setOnClickListener(v -> togglePlayPause(5, playButton6));
+        playButton7.setOnClickListener(v -> togglePlayPause(6, playButton7));
     }
 
     private void togglePlayPause(int musicIndex, ImageButton button) {
@@ -115,6 +122,15 @@ public class MusicPlaybackActivity extends AppCompatActivity {
             case 3:
                 musicResource = R.raw.music4;
                 break;
+            case 4:
+                musicResource = R.raw.music5;
+                break;
+            case 5:
+                musicResource = R.raw.music6;
+                break;
+            case 6:
+                musicResource = R.raw.music7;
+                break;
             default:
                 musicResource = R.raw.music1;
         }
@@ -145,15 +161,21 @@ public class MusicPlaybackActivity extends AppCompatActivity {
     private SeekBar getSeekBarForCurrentTrack() {
         switch (currentMusicIndex) {
             case 0:
-                return progressBar1;
+            return progressBar1;
             case 1:
-                return progressBar2;
+            return progressBar2;
             case 2:
-                return progressBar3;
+            return progressBar3;
             case 3:
-                return progressBar4;
+            return progressBar4;
+            case 4:
+            return progressBar5;
+            case 5:
+            return progressBar6;
+            case 6:
+            return progressBar7;
             default:
-                return null;
+            return null;
         }
     }
 
@@ -162,6 +184,9 @@ public class MusicPlaybackActivity extends AppCompatActivity {
         ((ImageButton)findViewById(R.id.playButton2)).setImageResource(android.R.drawable.ic_media_play);
         ((ImageButton)findViewById(R.id.playButton3)).setImageResource(android.R.drawable.ic_media_play);
         ((ImageButton)findViewById(R.id.playButton4)).setImageResource(android.R.drawable.ic_media_play);
+        ((ImageButton)findViewById(R.id.playButton5)).setImageResource(android.R.drawable.ic_media_play);
+        ((ImageButton)findViewById(R.id.playButton6)).setImageResource(android.R.drawable.ic_media_play);
+        ((ImageButton)findViewById(R.id.playButton7)).setImageResource(android.R.drawable.ic_media_play);
     }
 
     @Override

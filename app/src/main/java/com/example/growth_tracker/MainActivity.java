@@ -2,6 +2,7 @@ package com.example.growth_tracker;
 // MainActivity.java
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.content.SharedPreferences;
@@ -31,6 +32,9 @@ import androidx.core.content.FileProvider;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import android.app.PendingIntent;
+import android.app.AlarmManager;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
     private TextView totalScoreView;
@@ -83,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
         setupClickListeners();
         updateDateDisplay();
         checkAndResetScore();
+        scheduleDailyNotification();
     }
 
     private void checkFirstRun() {
@@ -293,10 +298,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Update views
-        physicalScoreView.setText("Physical Score: " + physicalScore);
-        mentalScoreView.setText("Mental Score: " + mentalScore);
-        emotionalScoreView.setText("Emotional Score: " + emotionalScore);
-        financialScoreView.setText("Financial Score: " + financialScore);
+        physicalScoreView.setText("Physical Fitness Score: " + physicalScore);
+        mentalScoreView.setText("Mental Fitness Score: " + mentalScore);
+        emotionalScoreView.setText("Emotional Fitness Score: " + emotionalScore);
+        financialScoreView.setText("Financial Fitness Score: " + financialScore);
 
         // Update progress bars and task counts
         updateAreaProgress(TaskArea.PHYSICAL, dbHelper);
@@ -305,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
         updateAreaProgress(TaskArea.FINANCIAL, dbHelper);
 
         // Format total score with percentage
-        String totalScoreText = String.format("Total Score: %d/%d",
+        String totalScoreText = String.format("Fitness Score: %d/%d",
                 totalAchievedScore, totalPossibleScore);
 
         String percentageText = String.format("Percentage: %.1f%%", percentage);
@@ -321,6 +326,40 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return score;
+    }
+
+    private void scheduleDailyNotification() {
+        scheduleNotification(21, 00, 0, 0);
+        scheduleNotification(21, 30, 1, 1);
+        scheduleNotification(22, 00, 2, 2);
+    }
+
+
+    private void scheduleNotification(int hour, int minute, int requestCode, int notificationId) {
+        Intent intent = new Intent(this, NotificationReceiver.class);
+        intent.putExtra("notificationId", notificationId);
+
+        // Make the intent unique by adding the requestCode as an extra
+        intent.putExtra("requestCode", requestCode);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        // Set the alarm to start at the specified time
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, 0);
+
+        // If the time is already past, set it for the next day
+        if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        // Set a repeating alarm
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
     private int calculateAreaPossibleScore(ArrayList<Task> tasks) {
